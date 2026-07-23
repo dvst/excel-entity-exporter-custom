@@ -143,26 +143,56 @@ public class ExcelExporterTests : IDisposable
     [Fact]
     public void CountCombinations_TextDateCell_SkipsRow()
     {
-        string filePath = CreateTestWorkbookWithHeaders(
-            ["RAZON SOCIAL", "FECHA INICIO COBERTURA", "MONTO"],
-            [
-                ["Empresa A", "not-a-date", "1000"],
-                ["Empresa A", "2025-06-15", "2000"],
-            ]);
+        string filePath = Path.Combine(_tempDir, $"test_{Guid.NewGuid():N}.xlsx");
+
+        using (var workbook = new XLWorkbook())
+        {
+            var ws = workbook.Worksheets.Add("Sheet1");
+            ws.Cell(1, 1).Value = "RAZON SOCIAL";
+            ws.Cell(1, 2).Value = "FECHA INICIO COBERTURA";
+            ws.Cell(1, 3).Value = "MONTO";
+
+            // Row with text (not a date) — should be skipped
+            ws.Cell(2, 1).Value = "Empresa A";
+            ws.Cell(2, 2).Value = "not-a-date";
+            ws.Cell(2, 3).Value = "1000";
+
+            // Row with a real DateTime — should be counted
+            ws.Cell(3, 1).Value = "Empresa A";
+            ws.Cell(3, 2).Value = new DateTime(2025, 6, 15);
+            ws.Cell(3, 3).Value = "2000";
+
+            workbook.SaveAs(filePath);
+        }
 
         int count = ExcelExporter.CountCombinations(filePath);
-        Assert.Equal(1, count); // only the valid date row counts
+        Assert.Equal(1, count); // only the valid DateTime row counts
     }
 
     [Fact]
     public void CountCombinations_EmptyEntity_SkipsRow()
     {
-        string filePath = CreateTestWorkbookWithHeaders(
-            ["RAZON SOCIAL", "FECHA INICIO COBERTURA", "MONTO"],
-            [
-                ["", "2025-01-15", "1000"],
-                ["Empresa A", "2025-01-20", "2000"],
-            ]);
+        string filePath = Path.Combine(_tempDir, $"test_{Guid.NewGuid():N}.xlsx");
+
+        using (var workbook = new XLWorkbook())
+        {
+            var ws = workbook.Worksheets.Add("Sheet1");
+            ws.Cell(1, 1).Value = "RAZON SOCIAL";
+            ws.Cell(1, 2).Value = "FECHA INICIO COBERTURA";
+            ws.Cell(1, 3).Value = "MONTO";
+
+            // Row with empty entity — should be skipped
+            ws.Cell(2, 1).Value = "";
+            ws.Cell(2, 2).Value = new DateTime(2025, 1, 15);
+            ws.Cell(2, 3).Value = "1000";
+
+            // Row with valid entity — should be counted
+            ws.Cell(3, 1).Value = "Empresa A";
+            ws.Cell(3, 2).Value = new DateTime(2025, 1, 20);
+            ws.Cell(3, 3).Value = "2000";
+
+            workbook.SaveAs(filePath);
+        }
 
         int count = ExcelExporter.CountCombinations(filePath);
         Assert.Equal(1, count); // only the row with entity counts
