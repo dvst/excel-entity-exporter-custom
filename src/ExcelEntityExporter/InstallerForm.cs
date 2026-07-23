@@ -25,6 +25,8 @@ public partial class InstallerForm : Form
     public InstallerForm()
     {
         InitializeComponent();
+        lblVersion.Text = $"v{VersionInfo.Version}";
+        Text = $"Excel Entity Exporter v{VersionInfo.Version}";
         UpdateStatus();
     }
 
@@ -91,9 +93,12 @@ public partial class InstallerForm : Form
             {
                 uninstallKey.SetValue("DisplayName", "Excel Entity Exporter");
                 uninstallKey.SetValue("DisplayDescription", "Export Excel files by entity and month/year");
-                uninstallKey.SetValue("UninstallString", $"\"{destExe}\" --uninstall");
-                uninstallKey.SetValue("InstallLocation", installDir);
+                uninstallKey.SetValue("DisplayVersion", VersionInfo.Version);
                 uninstallKey.SetValue("Publisher", "ExcelEntityExporter");
+                uninstallKey.SetValue("InstallLocation", installDir);
+                uninstallKey.SetValue("UninstallString", $"\"{destExe}\" --uninstall");
+                uninstallKey.SetValue("NoModify", 1, RegistryValueKind.DWord);
+                uninstallKey.SetValue("NoRepair", 1, RegistryValueKind.DWord);
             }
 
             MessageBox.Show(

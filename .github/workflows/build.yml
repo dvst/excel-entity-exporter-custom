@@ -16,11 +16,34 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
+
+      - name: Generate version string
+        id: version
+        shell: pwsh
+        run: |
+          $date = Get-Date -Format "yyyy-MM-dd"
+          $hash = (git rev-parse --short HEAD)
+          $version = "$date-$hash"
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+
+          # Generate VersionInfo.cs with the actual version
+          $content = @"
+          namespace ExcelEntityExporter;
+
+          internal static class VersionInfo
+          {
+              public const string Version = "$version";
+          }
+          "@
+          $content | Out-File -FilePath "src/ExcelEntityExporter/VersionInfo.cs" -Encoding utf8
+          Write-Host "Version: $version"
 
       - name: Restore dependencies
         run: dotnet restore
@@ -36,6 +59,9 @@ jobs:
           --self-contained true
           -p:PublishSingleFile=true
           -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:Version=${{ steps.version.outputs.VERSION }}
+          -p:AssemblyVersion=${{ steps.version.outputs.VERSION }}
+          -p:FileVersion=${{ steps.version.outputs.VERSION }}
           -o ./artifacts
 
       - name: Upload installer as artifact
@@ -51,8 +77,10 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
-          name: Latest Build
+          name: "Latest Build (${{ steps.version.outputs.VERSION }})"
           body: |
+            **Version:** ${{ steps.version.outputs.VERSION }}
+
             Auto-built from the latest commit on `main`.
 
             **Usage:**
