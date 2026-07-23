@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon />
+    <AssemblyName>installer-entity-exporter</AssemblyName>
+    <RootNamespace>ExcelEntityExporter</RootNamespace>
+    <Version>1.0.0</Version>
+    <Authors>ExcelEntityExporter</Authors>
+    <Description>Exports Excel files by entity and month/year with right-click context menu integration</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.102.3" />
+  </ItemGroup>
+
+</Project>
