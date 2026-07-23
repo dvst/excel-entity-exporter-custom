@@ -23,6 +23,9 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
+      - name: Run tests
+        run: dotnet test --no-restore --verbosity normal
+
       - name: Build and publish (Release, self-contained, single file)
         run: >
           dotnet publish src/ExcelEntityExporter/ExcelEntityExporter.csproj

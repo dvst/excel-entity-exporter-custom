@@ -15,7 +15,7 @@ public class ExcelExporter
     private const int MaxFileNameLength = 100;
 
     private static readonly string[] InvalidFileNameChars =
-        ['\\', '/', ':', '*', '?', '"', '<', '>', '|'];
+        ["\\", "/", ":", "*", "?", "\"", "<", ">", "|"];
 
     private static readonly Dictionary<int, string> MonthNames = new()
     {
@@ -234,9 +234,9 @@ public class ExcelExporter
     /// </summary>
     private static string CleanFileName(string name)
     {
-        foreach (char c in InvalidFileNameChars)
+        foreach (string c in InvalidFileNameChars)
         {
-            name = name.Replace(c.ToString(), "");
+            name = name.Replace(c, "");
         }
 
         if (name.Length > MaxFileNameLength)
