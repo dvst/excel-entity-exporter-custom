@@ -28,22 +28,34 @@ jobs:
         id: version
         shell: pwsh
         run: |
-          $date = Get-Date -Format "yyyy-MM-dd"
+          $year = Get-Date -Format "yyyy"
+          $month = Get-Date -Format "MM"
+          $day = Get-Date -Format "dd"
           $hash = (git rev-parse --short HEAD)
-          $version = "$date-$hash"
-          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
 
-          # Generate VersionInfo.cs with the actual version
+          # Human-readable version for VersionInfo.cs and UI display
+          $displayVersion = "$year-$month-$day-$hash"
+
+          # Numeric version for AssemblyVersion / FileVersion (required format: major.minor.build.revision)
+          # Convert first 4 hex chars of hash to a decimal number for the revision component
+          $hashDecimal = [Convert]::ToInt32($hash.Substring(0, [Math]::Min(4, $hash.Length)), 16)
+          $numericVersion = "$([int]$year).$([int]$month).$([int]$day).$hashDecimal"
+
+          echo "VERSION=$displayVersion" >> $env:GITHUB_OUTPUT
+          echo "NUMERIC_VERSION=$numericVersion" >> $env:GITHUB_OUTPUT
+
+          # Generate VersionInfo.cs with the human-readable version
           $content = @"
           namespace ExcelEntityExporter;
 
           internal static class VersionInfo
           {
-              public const string Version = "$version";
+              public const string Version = "$displayVersion";
           }
           "@
           $content | Out-File -FilePath "src/ExcelEntityExporter/VersionInfo.cs" -Encoding utf8
-          Write-Host "Version: $version"
+          Write-Host "Display version: $displayVersion"
+          Write-Host "Numeric version: $numericVersion"
 
       - name: Restore dependencies
         run: dotnet restore
@@ -60,8 +72,8 @@ jobs:
           -p:PublishSingleFile=true
           -p:IncludeNativeLibrariesForSelfExtract=true
           -p:Version=${{ steps.version.outputs.VERSION }}
-          -p:AssemblyVersion=${{ steps.version.outputs.VERSION }}
-          -p:FileVersion=${{ steps.version.outputs.VERSION }}
+          -p:AssemblyVersion=${{ steps.version.outputs.NUMERIC_VERSION }}
+          -p:FileVersion=${{ steps.version.outputs.NUMERIC_VERSION }}
           -o ./artifacts
 
       - name: Upload installer as artifact
