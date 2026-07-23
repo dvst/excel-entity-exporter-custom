@@ -13,11 +13,18 @@ Una herramienta para Windows que agrega **"Exportar por Entidad y Fecha"** al me
 
 ### Descarga
 
-Descarga la última versión desde la página de [**Releases**](https://github.com/dvst/excel-entity-exporter-custom/releases/latest). Obtendrás un solo archivo: `installer-entity-exporter.exe`.
+Descarga la última versión desde la página de [**Releases**](https://github.com/dvst/excel-entity-exporter-custom/releases/latest). Elige el archivo correcto para tu PC:
+
+| Archivo | Para |
+|---|---|
+| `installer-entity-exporter-x64.exe` | La mayoría de PCs con Windows (procesadores Intel/AMD) |
+| `installer-entity-exporter-arm64.exe` | Windows en ARM (Surface Pro X, laptops con Snapdragon) |
+
+> **¿No estás seguro?** Revisa tu sistema: abre **Configuración → Sistema → Información** y busca "Tipo de sistema". Si dice "procesador ARM", usa la versión ARM64. Si no, usa x64.
 
 ### Instalar
 
-1. Haz doble clic en `installer-entity-exporter.exe`
+1. Haz doble clic en el archivo `.exe` descargado
 2. Haz clic en **Instalar**
 3. ¡Listo! La opción del menú contextual ahora está disponible en todos los archivos `.xlsx`
 
@@ -25,7 +32,7 @@ Descarga la última versión desde la página de [**Releases**](https://github.c
 
 ### Desinstalar
 
-1. Haz doble clic en `installer-entity-exporter.exe` nuevamente
+1. Haz doble clic en el instalador `.exe` nuevamente (el que descargaste según tu arquitectura)
 2. Haz clic en **Desinstalar**
 3. La opción del menú contextual y los archivos instalados se eliminan
 
@@ -77,6 +84,9 @@ R: Sí. Cada vez que ejecutas la exportación, los archivos en la carpeta de sal
 
 **P: ¿Funciona con archivos `.xls` (formato antiguo de Excel)?**
 R: Actualmente solo se admiten archivos `.xlsx`.
+
+**P: ¿Qué versión debo descargar — x64 o ARM64?**
+R: Si tu PC tiene procesador Intel o AMD, usa x64. Si tiene procesador Qualcomm Snapdragon o similar ARM (como Surface Pro X), usa ARM64. Puedes verificarlo en **Configuración → Sistema → Información → Tipo de sistema**.
 
 ## Contribuir
 

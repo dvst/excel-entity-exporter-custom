@@ -1,4 +1,5 @@
 using Microsoft.Win32;
+using System.Runtime.InteropServices;
 
 namespace ExcelEntityExporter;
 
@@ -27,7 +28,29 @@ public partial class InstallerForm : Form
         InitializeComponent();
         lblVersion.Text = $"v{VersionInfo.Version}";
         Text = $"Excel Entity Exporter v{VersionInfo.Version}";
+        DetectArchitecture();
         UpdateStatus();
+    }
+
+    private void DetectArchitecture()
+    {
+        var arch = RuntimeInformation.ProcessArchitecture;
+        string archLabel = arch switch
+        {
+            Architecture.Arm64 => "ARM64",
+            Architecture.X64 => "x64",
+            Architecture.X86 => "x86",
+            _ => arch.ToString()
+        };
+
+        lblArch.Text = $"Architecture: {archLabel}";
+
+        // Warn if running x64 on ARM (via emulation) — user should download the ARM64 build
+        if (RuntimeInformation.OSArchitecture == Architecture.Arm64 && arch != Architecture.Arm64)
+        {
+            lblArch.ForeColor = Color.OrangeRed;
+            lblArch.Text += " (download the ARM64 version for best performance)";
+        }
     }
 
     private void UpdateStatus()

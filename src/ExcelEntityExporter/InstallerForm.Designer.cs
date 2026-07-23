@@ -17,6 +17,7 @@ partial class InstallerForm
     {
         this.lblTitle = new Label();
         this.lblVersion = new Label();
+        this.lblArch = new Label();
         this.lblDescription = new Label();
         this.lblStatus = new Label();
         this.btnInstall = new Button();
@@ -36,9 +37,16 @@ partial class InstallerForm
         this.lblVersion.Location = new Point(30, 48);
         this.lblVersion.Text = "";
 
+        // lblArch
+        this.lblArch.AutoSize = true;
+        this.lblArch.Font = new Font("Segoe UI", 8F);
+        this.lblArch.ForeColor = Color.Gray;
+        this.lblArch.Location = new Point(30, 68);
+        this.lblArch.Text = "";
+
         // lblDescription
         this.lblDescription.Font = new Font("Segoe UI", 9F);
-        this.lblDescription.Location = new Point(30, 75);
+        this.lblDescription.Location = new Point(30, 90);
         this.lblDescription.Size = new Size(340, 30);
         this.lblDescription.Text = "Adds \"Exportar por Entidad y Fecha\" to the right-click " +
             "context menu on .xlsx files in Windows Explorer.";
@@ -46,7 +54,7 @@ partial class InstallerForm
         // lblStatus
         this.lblStatus.Font = new Font("Segoe UI", 8F, FontStyle.Italic);
         this.lblStatus.ForeColor = Color.Gray;
-        this.lblStatus.Location = new Point(30, 115);
+        this.lblStatus.Location = new Point(30, 130);
         this.lblStatus.Size = new Size(340, 20);
         this.lblStatus.Text = "";
 
@@ -55,7 +63,7 @@ partial class InstallerForm
         this.btnInstall.BackColor = Color.FromArgb(0, 120, 215);
         this.btnInstall.ForeColor = Color.White;
         this.btnInstall.FlatStyle = FlatStyle.Flat;
-        this.btnInstall.Location = new Point(30, 150);
+        this.btnInstall.Location = new Point(30, 165);
         this.btnInstall.Size = new Size(160, 40);
         this.btnInstall.Text = "Instalar";
         this.btnInstall.UseVisualStyleBackColor = false;
@@ -64,7 +72,7 @@ partial class InstallerForm
         // btnUninstall
         this.btnUninstall.Font = new Font("Segoe UI", 10F);
         this.btnUninstall.FlatStyle = FlatStyle.Flat;
-        this.btnUninstall.Location = new Point(210, 150);
+        this.btnUninstall.Location = new Point(210, 165);
         this.btnUninstall.Size = new Size(160, 40);
         this.btnUninstall.Text = "Desinstalar";
         this.btnUninstall.Click += new EventHandler(this.BtnUninstall_Click);
@@ -72,9 +80,10 @@ partial class InstallerForm
         // InstallerForm
         this.AutoScaleDimensions = new SizeF(7F, 15F);
         this.AutoScaleMode = AutoScaleMode.Font;
-        this.ClientSize = new Size(400, 210);
+        this.ClientSize = new Size(400, 225);
         this.Controls.Add(this.lblTitle);
         this.Controls.Add(this.lblVersion);
+        this.Controls.Add(this.lblArch);
         this.Controls.Add(this.lblDescription);
         this.Controls.Add(this.lblStatus);
         this.Controls.Add(this.btnInstall);
@@ -90,6 +99,7 @@ partial class InstallerForm
 
     private Label lblTitle;
     private Label lblVersion;
+    private Label lblArch;
     private Label lblDescription;
     private Label lblStatus;
     private Button btnInstall;

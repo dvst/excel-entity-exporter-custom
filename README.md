@@ -20,11 +20,18 @@ A Windows tool that adds **"Exportar por Entidad y Fecha"** to the right-click c
 
 ### Download
 
-Download the latest version from the [**Releases**](https://github.com/dvst/excel-entity-exporter-custom/releases/latest) page. You will get a single file: `installer-entity-exporter.exe`.
+Download the latest version from the [**Releases**](https://github.com/dvst/excel-entity-exporter-custom/releases/latest) page. Choose the correct file for your PC:
+
+| File | For |
+|---|---|
+| `installer-entity-exporter-x64.exe` | Most Windows PCs (Intel/AMD processors) |
+| `installer-entity-exporter-arm64.exe` | Windows on ARM (Surface Pro X, Snapdragon laptops) |
+
+> **Not sure?** Check your system: open **Settings → System → About** and look for "System type". If it says "ARM-based processor", use the ARM64 version. Otherwise, use x64.
 
 ### Install
 
-1. Double-click `installer-entity-exporter.exe`
+1. Double-click the downloaded `.exe` file
 2. Click **Instalar**
 3. Done! The context menu option is now available on all `.xlsx` files
 
@@ -32,7 +39,7 @@ Download the latest version from the [**Releases**](https://github.com/dvst/exce
 
 ### Uninstall
 
-1. Double-click `installer-entity-exporter.exe` again
+1. Double-click the installer `.exe` again (whichever architecture you downloaded)
 2. Click **Desinstalar**
 3. The context menu option and installed files are removed
 
@@ -84,6 +91,9 @@ A: Yes. Each time you run the export, the files in the output folder are overwri
 
 **Q: Does it work with `.xls` files (old Excel format)?**
 A: Currently only `.xlsx` files are supported.
+
+**Q: Which version should I download — x64 or ARM64?**
+A: If your PC has an Intel or AMD processor, use x64. If it has a Qualcomm Snapdragon or similar ARM processor (like Surface Pro X), use ARM64. You can check in **Settings → System → About → System type**.
 
 ## Contributing
 

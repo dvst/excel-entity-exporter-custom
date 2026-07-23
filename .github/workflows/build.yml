@@ -63,7 +63,7 @@ jobs:
       - name: Run tests
         run: dotnet test --no-restore --verbosity normal
 
-      - name: Build and publish (Release, self-contained, single file)
+      - name: Build and publish (x64)
         run: >
           dotnet publish src/ExcelEntityExporter/ExcelEntityExporter.csproj
           -c Release
@@ -74,13 +74,34 @@ jobs:
           -p:Version=${{ steps.version.outputs.VERSION }}
           -p:AssemblyVersion=${{ steps.version.outputs.NUMERIC_VERSION }}
           -p:FileVersion=${{ steps.version.outputs.NUMERIC_VERSION }}
-          -o ./artifacts
+          -o ./artifacts/x64
 
-      - name: Upload installer as artifact
+      - name: Build and publish (ARM64)
+        run: >
+          dotnet publish src/ExcelEntityExporter/ExcelEntityExporter.csproj
+          -c Release
+          -r win-arm64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:Version=${{ steps.version.outputs.VERSION }}
+          -p:AssemblyVersion=${{ steps.version.outputs.NUMERIC_VERSION }}
+          -p:FileVersion=${{ steps.version.outputs.NUMERIC_VERSION }}
+          -o ./artifacts/arm64
+
+      - name: Upload x64 artifact
         uses: actions/upload-artifact@v4
         with:
-          name: installer-entity-exporter
-          path: artifacts/installer-entity-exporter.exe
+          name: installer-entity-exporter-x64
+          path: artifacts/x64/installer-entity-exporter.exe
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Upload ARM64 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: installer-entity-exporter-arm64
+          path: artifacts/arm64/installer-entity-exporter.exe
           if-no-files-found: error
           retention-days: 90
 
@@ -95,10 +116,16 @@ jobs:
 
             Auto-built from the latest commit on `main`.
 
+            **Downloads:**
+            - **`installer-entity-exporter-x64.exe`** — for most Windows PCs (Intel/AMD processors)
+            - **`installer-entity-exporter-arm64.exe`** — for Windows on ARM (Surface Pro X, Snapdragon laptops)
+
             **Usage:**
-            1. Download `installer-entity-exporter.exe`
+            1. Download the correct `.exe` for your architecture
             2. Double-click it → click **Instalar**
             3. Right-click any `.xlsx` file → select **Exportar por Entidad y Fecha**
             4. To uninstall: double-click the installer again → click **Desinstalar**
-          files: artifacts/installer-entity-exporter.exe
+          files: |
+            artifacts/x64/installer-entity-exporter.exe
+            artifacts/arm64/installer-entity-exporter.exe
           prerelease: false
