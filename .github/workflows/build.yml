@@ -10,6 +10,8 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
@@ -43,3 +45,20 @@ jobs:
           path: artifacts/installer-entity-exporter.exe
           if-no-files-found: error
           retention-days: 90
+
+      - name: Create or update GitHub Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Latest Build
+          body: |
+            Auto-built from the latest commit on `main`.
+
+            **Usage:**
+            1. Download `installer-entity-exporter.exe`
+            2. Double-click it → click **Instalar**
+            3. Right-click any `.xlsx` file → select **Exportar por Entidad y Fecha**
+            4. To uninstall: double-click the installer again → click **Desinstalar**
+          files: artifacts/installer-entity-exporter.exe
+          prerelease: false
